@@ -1,18 +1,11 @@
 package com.borsaistanbul.stockvaluation.exception;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-@Getter
-@Setter
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
 public class StockValuationApiException extends RuntimeException {
-    private final String responseCode;
-    private final String responseDesc;
-
-    @Builder
-    public StockValuationApiException(String responseCode, String responseDesc) {
-        this.responseCode = responseCode;
-        this.responseDesc = responseDesc;
+    public StockValuationApiException(String message) {
+        super(message);
     }
-
 }

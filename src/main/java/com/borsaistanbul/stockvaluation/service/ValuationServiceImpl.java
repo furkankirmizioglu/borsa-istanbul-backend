@@ -10,7 +10,6 @@ import com.borsaistanbul.stockvaluation.exception.StockValuationApiException;
 import com.borsaistanbul.stockvaluation.repository.CompanyInfoRepository;
 import com.borsaistanbul.stockvaluation.repository.ValuationInfoRepository;
 import com.borsaistanbul.stockvaluation.utils.CalculateTools;
-import com.borsaistanbul.stockvaluation.utils.ResponseCodes;
 import com.borsaistanbul.stockvaluation.utils.Utils;
 import feign.Response;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -79,7 +79,9 @@ public class ValuationServiceImpl implements ValuationService {
                 log.info("{} için değerleme işlemi tamamlandı.", company.getTicker());
 
             } catch (Exception ex) {
-                log.error("{} için değerleme hesaplanırken bir hata oluştu, bu şirket listeye dahil değildir...", company.getTicker());
+                String x = MessageFormat.format("{0} için değerleme hesaplanırken bir hata oluştu. Hata detayı: {1}", company.getTicker(), ex.getMessage());
+                log.error(x);
+                throw new StockValuationApiException(x);
             }
         });
 
@@ -94,7 +96,7 @@ public class ValuationServiceImpl implements ValuationService {
             workbook.close();
             return response;
         } catch (IOException ex) {
-            throw new StockValuationApiException(ResponseCodes.UNKNOWN_ERROR, ex.getMessage());
+            throw new StockValuationApiException(ex.getMessage());
         }
     }
 
@@ -115,7 +117,7 @@ public class ValuationServiceImpl implements ValuationService {
 
             return new XSSFWorkbook(tempFile.toFile());
         } catch (IOException | InvalidFormatException e) {
-            throw new StockValuationApiException(ResponseCodes.API_EXCEPTION, "Error downloading financial table: " + e.getMessage());
+            throw new StockValuationApiException("Error downloading financial table: " + e.getMessage());
         }
     }
 

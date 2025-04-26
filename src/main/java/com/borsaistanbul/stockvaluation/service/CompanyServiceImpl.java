@@ -3,7 +3,6 @@ package com.borsaistanbul.stockvaluation.service;
 import com.borsaistanbul.stockvaluation.dto.entity.CompanyInfo;
 import com.borsaistanbul.stockvaluation.exception.StockValuationApiException;
 import com.borsaistanbul.stockvaluation.repository.CompanyInfoRepository;
-import com.borsaistanbul.stockvaluation.utils.ResponseCodes;
 import com.borsaistanbul.stockvaluation.utils.Utils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -62,7 +61,7 @@ public class CompanyServiceImpl implements CompanyService {
             workbook.close();
             file.close();
         } catch (IOException ex) {
-            throw new StockValuationApiException(ResponseCodes.API_EXCEPTION, ex.getMessage());
+            throw new StockValuationApiException(ex.getMessage());
         }
     }
 
